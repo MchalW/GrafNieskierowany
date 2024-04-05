@@ -22,3 +22,5 @@ public class Main {
         gr.getPoints();
     }
 }
+
+//very stupid comment
