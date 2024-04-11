@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Graf {
@@ -107,15 +108,44 @@ public class Graf {
         punkty.remove(index);
     }
 
+
+    String lookForPoint(int firstPoint, int lastPoint,Punkt curPoint, String droga){
+        if(curPoint.pointId == firstPoint){
+            droga = "";
+        }
+        if(curPoint.drogi.get(0).point1.pointId == curPoint.pointId){
+            droga = droga + lookForPoint(firstPoint, lastPoint, curPoint.drogi.get(0).point2, droga);
+
+        }
+        else{
+            droga = droga + lookForPoint(firstPoint, lastPoint, curPoint.drogi.get(0).point1, droga);
+
+        }
+        return;
+
+
+
+//        for(int i = 1; i < curPoint.drogi.size(); i++){
+//            if(curPoint.drogi.get(i).point1.pointId == curPoint.pointId){
+//                lista.add(curPoint.drogi.get(i).point2.pointId);
+//            }
+//            else{
+//                lista.add(curPoint.drogi.get(i).point1.pointId);
+//            }
+//            if(curPoint.drogi.get(i).point2.pointId != lastPoint && curPoint.drogi.get(i).point1.pointId != lastPoint){
+//                lookForPoint(firstPoint, lastPoint, curPoint.drogi.get(i).point1, lista);
+//            }
+//        }
+
+    }
+
     int shortestWay(int pkt1, int pkt2){
         int pkt1Index = getIndPoint(pkt1);
         int pkt2Index = getIndPoint(pkt2);
-        ArrayList<Integer> drogiZrobione = new ArrayList<Integer>();
+        ArrayList<String> drogiZrobione = new ArrayList<String>();
         Punkt pkt1Node = punkty.get(pkt1Index);
-        for(int i = 0;  i < punkty.get(pkt1Index).drogi.size(); i++){
-            System.out.print(pkt1Node.drogi.get(i).point1.pointId+" ");
-            System.out.println(pkt1Node.drogi.get(i).point2.pointId);
-        }
+        lookForPoint(pkt1, pkt2, punkty.get(pkt1Index),"");
+
         return 0;
     }
 }
