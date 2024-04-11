@@ -6,20 +6,19 @@ public class Main {
         gr.addPoint(1);
         gr.addPoint(2);
         gr.addPoint(3);
+        gr.addPoint(4);
         gr.addPoint(5);
-        gr.addWay(1, 2, 12);
-        gr.addWay(1, 3, 13);
-        gr.addWay(1, 5, 14);
-        gr.addWay(1, 2, 13);
-        gr.addWay(2, 5, 13);
-        gr.getWays(1);
-        gr.getWays(5);
-        gr.getPoints();
-        gr.deletePoint(2);
-        gr.addWay(2, 5, 13);
-        gr.getWays(1);
-        gr.getWays(5);
-        gr.getPoints();
+        gr.addPoint(6);
+
+        gr.addWay(1, 2, 2);
+        gr.addWay(1, 3, 3);
+        gr.addWay(1, 6, 99);
+        gr.addWay(2, 3, 3);
+        gr.addWay(2, 4, 3);
+        gr.addWay(5, 4, 1);
+        gr.addWay(5, 3, 6);
+
+        gr.shortestWay(1, 5);
     }
 }
 

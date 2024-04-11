@@ -107,7 +107,15 @@ public class Graf {
         punkty.remove(index);
     }
 
-    int shortestWay(int pkt1, int pk2){
+    int shortestWay(int pkt1, int pkt2){
+        int pkt1Index = getIndPoint(pkt1);
+        int pkt2Index = getIndPoint(pkt2);
+        ArrayList<Integer> drogiZrobione = new ArrayList<Integer>();
+        Punkt pkt1Node = punkty.get(pkt1Index);
+        for(int i = 0;  i < punkty.get(pkt1Index).drogi.size(); i++){
+            System.out.print(pkt1Node.drogi.get(i).point1.pointId+" ");
+            System.out.println(pkt1Node.drogi.get(i).point2.pointId);
+        }
         return 0;
     }
 }
