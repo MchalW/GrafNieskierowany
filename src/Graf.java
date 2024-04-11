@@ -106,4 +106,8 @@ public class Graf {
         }
         punkty.remove(index);
     }
+
+    int shortestWay(int pkt1, int pk2){
+        return 0;
+    }
 }
