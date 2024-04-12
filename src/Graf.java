@@ -121,7 +121,7 @@ public class Graf {
             droga = droga + lookForPoint(firstPoint, lastPoint, curPoint.drogi.get(0).point1, droga);
 
         }
-        return;
+        return String.valueOf(curPoint.pointId);
 
 
 
