@@ -109,43 +109,50 @@ public class Graf {
     }
 
 
-    String lookForPoint(int firstPoint, int lastPoint,Punkt curPoint, String droga){
-        if(curPoint.pointId == firstPoint){
-            droga = "";
-        }
-        if(curPoint.drogi.get(0).point1.pointId == curPoint.pointId){
-            droga = droga + lookForPoint(firstPoint, lastPoint, curPoint.drogi.get(0).point2, droga);
-
-        }
-        else{
-            droga = droga + lookForPoint(firstPoint, lastPoint, curPoint.drogi.get(0).point1, droga);
-
-        }
-        return String.valueOf(curPoint.pointId);
-
-
-
-//        for(int i = 1; i < curPoint.drogi.size(); i++){
-//            if(curPoint.drogi.get(i).point1.pointId == curPoint.pointId){
-//                lista.add(curPoint.drogi.get(i).point2.pointId);
-//            }
-//            else{
-//                lista.add(curPoint.drogi.get(i).point1.pointId);
-//            }
-//            if(curPoint.drogi.get(i).point2.pointId != lastPoint && curPoint.drogi.get(i).point1.pointId != lastPoint){
-//                lookForPoint(firstPoint, lastPoint, curPoint.drogi.get(i).point1, lista);
-//            }
-//        }
-
-    }
 
     int shortestWay(int pkt1, int pkt2){
-        int pkt1Index = getIndPoint(pkt1);
-        int pkt2Index = getIndPoint(pkt2);
-        ArrayList<String> drogiZrobione = new ArrayList<String>();
-        Punkt pkt1Node = punkty.get(pkt1Index);
-        lookForPoint(pkt1, pkt2, punkty.get(pkt1Index),"");
-
-        return 0;
+        ArrayList<Punkt> pnt = new ArrayList<Punkt>();
+        for(int i = 0; i < punkty.size(); i++){
+            punkty.get(i).sumWeights = 999999;
+            pnt.add(punkty.get(i));
+        }
+        punkty.get(getIndPoint(pkt1)).fromWhatPoint = null;
+        punkty.get(getIndPoint(pkt1)).sumWeights = 0;
+        while(!pnt.isEmpty()){
+            int indSmalPoint = 99999;
+            int indSmal = 0;
+            for(int i = 0; i < pnt.size(); i++){
+                if(pnt.get(i).sumWeights < indSmalPoint){
+                    indSmalPoint = pnt.get(i).sumWeights;
+                    indSmal = i;
+                }
+            }
+            for(int j = 0; j < pnt.get(indSmal).drogi.size(); j++){
+                if(pnt.get(indSmal).drogi.get(j).point1.pointId == pnt.get(indSmal).pointId){
+                    int curWeight = pnt.get(indSmal).sumWeights + pnt.get(indSmal).drogi.get(j).weight;
+                    if(pnt.get(indSmal).drogi.get(j).point2.sumWeights > curWeight){
+                        pnt.get(indSmal).drogi.get(j).point2.sumWeights = curWeight;
+                    }
+                    System.out.println(pnt.get(indSmal).pointId+" "+curWeight);
+                }
+                else{
+                    int curWeight = pnt.get(indSmal).sumWeights + pnt.get(indSmal).drogi.get(j).weight;
+                    if(pnt.get(indSmal).drogi.get(j).point1.sumWeights > curWeight){
+                        pnt.get(indSmal).drogi.get(j).point1.sumWeights = curWeight;
+                    }
+                    System.out.println(pnt.get(indSmal).pointId+" "+curWeight);
+                }
+            }
+            pnt.remove(indSmal);
+            for(int i = 0; i < punkty.size(); i++){
+                System.out.print(punkty.get(i).sumWeights+" ");
+            }
+            System.out.println("");
+        }
+        for(int i = 0; i < punkty.size(); i++){
+            System.out.println(punkty.get(i).sumWeights);
+        }
+        System.out.println("Najkrótsza droga od "+pkt1+" do "+pkt2+" = "+punkty.get(getIndPoint(pkt2)).sumWeights);
+        return punkty.get(getIndPoint(pkt2)).sumWeights;
     }
 }

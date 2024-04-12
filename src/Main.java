@@ -17,6 +17,7 @@ public class Main {
         gr.addWay(2, 4, 3);
         gr.addWay(5, 4, 1);
         gr.addWay(5, 3, 6);
+        gr.addWay(5, 2, 1);
 
         gr.shortestWay(1, 5);
     }
