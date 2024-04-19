@@ -1,10 +1,15 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Graf {
     int curId;
     int lastId;
     ArrayList<Punkt> punkty = new ArrayList<Punkt>();
+    ArrayList<Droga> drogi = new ArrayList<Droga>();
     Graf(){
         curId = 1;
         lastId = 1;
@@ -64,6 +69,7 @@ public class Graf {
                 }
             }
             System.out.println("Dodano droge: "+pkt1+" + "+pkt2);
+            drogi.add(dr);
         }
     }
 
@@ -154,5 +160,51 @@ public class Graf {
         }
         System.out.println("Najkrótsza droga od "+pkt1+" do "+pkt2+" = "+punkty.get(getIndPoint(pkt2)).sumWeights);
         return punkty.get(getIndPoint(pkt2)).sumWeights;
+    }
+
+    int indexGroup (ArrayList<ArrayList<Integer>> listOfLists, int goal){
+        for(int i = 0; i < listOfLists.size(); i++){
+            if(listOfLists.get(i).contains(goal)){
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    int MSTreeKruskala(){
+        ArrayList<Droga> drg = new ArrayList();
+        ArrayList<Droga> drgTemp = new ArrayList<Droga>();
+        drgTemp = drogi;
+        int najmn, index = -1;
+        while(!drgTemp.isEmpty()){
+            najmn = 999999;
+            for(int i = 0; i < drgTemp.size(); i++){
+                if(drgTemp.get(i).weight < najmn){
+                    najmn = drgTemp.get(i).weight;
+                    index = i;
+                }
+            }
+            drg.add(drgTemp.get(index));
+            drgTemp.remove(index);
+        }
+        for(int i = 0; i < drg.size(); i++){
+            System.out.print(drg.get(i).weight+" ");
+        }
+        System.out.println("");
+        Set<Integer> treePoints = new TreeSet<>();
+        Droga curDrg;
+        while(treePoints.size() < punkty.size()){
+            curDrg = drg.get(0);
+            if(!treePoints.contains(curDrg.point1.pointId) || !treePoints.contains(curDrg.point2.pointId)){
+                treePoints.add(curDrg.point1.pointId);
+                treePoints.add(curDrg.point2.pointId);
+                System.out.print(treePoints);
+                System.out.println("");
+                System.out.println(curDrg.point1.pointId+" "+curDrg.point2.pointId);
+            }
+
+            drg.remove(0);
+        }
+        return 0;
     }
 }

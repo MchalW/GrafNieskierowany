@@ -20,6 +20,8 @@ public class Main {
         gr.addWay(5, 2, 1);
 
         gr.shortestWay(1, 5);
+
+        gr.MSTreeKruskala();
     }
 }
 

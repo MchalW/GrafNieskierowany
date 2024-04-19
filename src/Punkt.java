@@ -5,4 +5,5 @@ public class Punkt {
     ArrayList<Droga> drogi = new ArrayList<Droga>();
     int sumWeights;
     Punkt fromWhatPoint;
+    int group;
 }
