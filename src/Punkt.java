@@ -6,4 +6,5 @@ public class Punkt {
     int sumWeights;
     Punkt fromWhatPoint;
     int group;
+    int colorId;
 }

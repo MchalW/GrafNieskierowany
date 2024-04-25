@@ -207,4 +207,68 @@ public class Graf {
         }
         return 0;
     }
+
+    int checkPoint(int index){
+        int color = 1;
+        int i = 0;
+        while(i < punkty.get(index).drogi.size()){
+            if (punkty.get(index).drogi.get(i).point1.colorId == color || punkty.get(index).drogi.get(i).point2.colorId == color) {
+                color++;
+                i = 0;
+            }
+        }
+        return color;
+    }
+    int minColors(){
+        int najmnKr = 0;
+        int index = 0;
+        int maxCol = 0;
+        for(int i = 0; i < punkty.size(); i++){
+            punkty.get(i).colorId = 0;
+            if(punkty.get(i).drogi.size() > najmnKr){
+                najmnKr = punkty.get(i).drogi.size();
+                index = punkty.get(i).pointId;
+            }
+        }
+        ArrayList<Droga> colorRoads = drogi;
+        ArrayList<Punkt> notColored = punkty;
+        int indTemp = 0;
+        while(indTemp < notColored.size() - 1){
+            if(notColored.get(indTemp).drogi.size() < notColored.get(indTemp + 1).drogi.size()){
+                Collections.swap(notColored, indTemp, indTemp+1);
+                indTemp = 0;
+            }
+            else{
+                indTemp++;
+            }
+        }
+        punkty.get(index).colorId = 1;
+        maxCol++;
+        notColored.remove(index);
+        int color;
+        while (!colorRoads.isEmpty()){
+            for(int i = 0; i < colorRoads.size(); i++){
+                if(!notColored.contains(colorRoads.get(i).point1) && !notColored.contains(colorRoads.get(i).point2)){
+                    colorRoads.remove(i);
+                }
+                else if(!notColored.contains(colorRoads.get(i).point1)){
+                    color = checkPoint(getIndPoint(colorRoads.get(i).point2.pointId));
+                    colorRoads.get(i).point2.colorId = color;
+                    if(color > maxCol){
+                        maxCol++;
+                    }
+                    colorRoads.remove(i);
+                }
+                else if(!notColored.contains(colorRoads.get(i).point2)){
+                    color = checkPoint(getIndPoint(colorRoads.get(i).point1.pointId));
+                    colorRoads.get(i).point1.colorId = color;
+                    if(color > maxCol){
+                        maxCol++;
+                    }
+                    colorRoads.remove(i);
+                }
+            }
+        }
+        return maxCol;
+    }
 }
