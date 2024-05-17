@@ -208,30 +208,43 @@ public class Graf {
         return 0;
     }
 
-    int checkPoint(int index){
-        int color = 1;
-        int i = 0;
-        while(i < punkty.get(index).drogi.size()){
-            if (punkty.get(index).drogi.get(i).point1.colorId == color || punkty.get(index).drogi.get(i).point2.colorId == color) {
-                color++;
-                i = 0;
+    boolean checkPoint(int pkt, int color, ArrayList<Punkt> points){
+        for(int p = 0; p < points.size(); p++){
+            if(pkt == points.get(p).pointId){
+                for(int r = 0; r < points.get(p).drogi.size(); r++){
+                    if(points.get(p).pointId == points.get(p).drogi.get(r).point1.pointId){
+                        if(points.get(p).drogi.get(r).point2.colorId == color){
+                            return false;
+                        }
+                    }
+                    else if(points.get(p).pointId == points.get(p).drogi.get(r).point2.pointId){
+                        if(points.get(p).drogi.get(r).point1.colorId == color){
+                            return false;
+                        }
+                    }
+                }
+                return true;
             }
         }
-        return color;
+        return false;
     }
+
+    private int getIndPointColors(int pkt, ArrayList<Punkt> points){
+        for(int p = 0; p < points.size(); p++){
+            if(pkt == points.get(p).pointId){
+                return p;
+            }
+        }
+        return -1;
+    }
+
     int minColors(){
         int najmnKr = 0;
         int index = 0;
         int maxCol = 0;
-        for(int i = 0; i < punkty.size(); i++){
-            punkty.get(i).colorId = 0;
-            if(punkty.get(i).drogi.size() > najmnKr){
-                najmnKr = punkty.get(i).drogi.size();
-                index = punkty.get(i).pointId;
-            }
-        }
-        ArrayList<Droga> colorRoads = drogi;
-        ArrayList<Punkt> notColored = punkty;
+        ArrayList<Punkt> notColored = new ArrayList<Punkt>();
+        notColored.addAll(punkty);
+        System.out.println("");
         int indTemp = 0;
         while(indTemp < notColored.size() - 1){
             if(notColored.get(indTemp).drogi.size() < notColored.get(indTemp + 1).drogi.size()){
@@ -242,33 +255,42 @@ public class Graf {
                 indTemp++;
             }
         }
-        punkty.get(index).colorId = 1;
-        maxCol++;
-        notColored.remove(index);
-        int color;
-        while (!colorRoads.isEmpty()){
-            for(int i = 0; i < colorRoads.size(); i++){
-                if(!notColored.contains(colorRoads.get(i).point1) && !notColored.contains(colorRoads.get(i).point2)){
-                    colorRoads.remove(i);
-                }
-                else if(!notColored.contains(colorRoads.get(i).point1)){
-                    color = checkPoint(getIndPoint(colorRoads.get(i).point2.pointId));
-                    colorRoads.get(i).point2.colorId = color;
-                    if(color > maxCol){
-                        maxCol++;
-                    }
-                    colorRoads.remove(i);
-                }
-                else if(!notColored.contains(colorRoads.get(i).point2)){
-                    color = checkPoint(getIndPoint(colorRoads.get(i).point1.pointId));
-                    colorRoads.get(i).point1.colorId = color;
-                    if(color > maxCol){
-                        maxCol++;
-                    }
-                    colorRoads.remove(i);
-                }
+        for(int i = 0; i < notColored.size(); i++){
+            notColored.get(i).colorId = 0;
+            if(notColored.get(i).drogi.size() > najmnKr){
+                najmnKr = notColored.get(i).drogi.size();
+                index = notColored.get(i).pointId;
             }
         }
-        return maxCol;
+        for(int j = 0; j < notColored.size(); j++){
+            System.out.print(notColored.get(j).pointId+" ");
+        }
+        System.out.println("");
+        for(int j = 0; j < punkty.size(); j++){
+            System.out.print(punkty.get(j).pointId+" "+punkty.get(j).colorId+" | ");
+        }
+        System.out.println("");
+        notColored.get(0).colorId = 1;
+        maxCol++;
+        notColored.remove(0);
+        int color = 0;
+        do{
+            color++;
+            for(int i = 0; i < notColored.size(); i++){
+                if(checkPoint(notColored.get(i).pointId, color, notColored)){
+                    notColored.get(i).colorId = color;
+                    notColored.remove(i);
+                }
+            }
+            for(int j = 0; j < punkty.size(); j++){
+                System.out.print(punkty.get(j).pointId+" "+punkty.get(j).colorId+" | ");
+            }
+            System.out.println("");
+            for(int j = 0; j < notColored.size(); j++){
+                System.out.print(notColored.get(j).pointId+" ");
+            }
+            System.out.println("");
+        }while (!notColored.isEmpty());
+        return color;
     }
 }
